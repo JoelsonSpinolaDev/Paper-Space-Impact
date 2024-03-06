@@ -1,0 +1,37 @@
+class Enemy(Entity):
+    def __init__(self):
+          super().__init__() 
+          
+          self.model="../Assets/IMG/rock.obj"
+          self.scale=(0.5,0.5,0.5)
+          self. texture="../Assets/IMG/rock-face.jpg"
+          self.z=60
+          
+          #self.position=(0,0,0)
+          self.speed =1
+          
+    
+    def update(self):
+        rotation_speed = math.radians(10)
+        if held_keys['g']:
+                self.z -= self.speed
+                self.rotation_z += rotation_speed
+                self.rotation_x += rotation_speed
+                self.rotation_y += rotation_speed
+                print(self.z)
+        if(self.z<=-22):
+            self.z=60
+            self.speed=self.speed+0.2
+        if(self.speed>=2.4):
+                self.speed=1
+                
+        #colision check if colide goes asside
+        dup_enemies = [entity for entity in scene.entities if isinstance(entity, DupEnemy)]
+        for dup_enemy in dup_enemies:
+            if abs(self.x - dup_enemy.x) < (self.scale_x + dup_enemy.scale_x) / 2 and \
+               abs(self.y - dup_enemy.y) < (self.scale_y + dup_enemy.scale_y) / 2:
+                # Handle collision
+                self.x += 0.05 * (self.x - dup_enemy.x)
+                self.y += 0.05 * (self.y - dup_enemy.y)
+                dup_enemy.x -= 0.05 * (self.x - dup_enemy.x)
+                dup_enemy.y -= 0.05 * (self.y - dup_enemy.y)
